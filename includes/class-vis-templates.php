@@ -25,6 +25,7 @@ class VIS_Templates {
 		$lines[] = '# vi: set ft=ruby :' . "\n";
 		$lines[] = 'Vagrant::Config.run do |config|';
 		$lines[] = '	config.vm.box = "precise32"';
+		//$lines[] = '	config.vm.provision :shell, :inline => "git submodule foreach git pull origin master"';
 		$lines[] = '	config.vm.box_url = "http://files.vagrantup.com/precise32.box"';
 		$lines[] = '	config.vm.host_name = "10up"';
 		$lines[] = '	config.vm.network :hostonly, "42.42.42.42"'; // the answer to the universe is "42"
@@ -106,16 +107,21 @@ class VIS_Templates {
 
 			foreach( $settings[ 'mysql-imports' ] as $import_file ) {
 				$import_file = VIS_System::extract_filename( $import_file );
-				$lines[] = 'cookbook_file "/mysql-db-imports/' . $import_file . '" do';
-				$lines[] = '	mode 0644';
-				$lines[] = '	source "' . $import_file . '"';
-				$lines[] = 'end';
 
 				// remove the extension on this filename
 				$db_name = explode( '.', $import_file );
 				array_pop( $db_name );
 				$db_name = implode( '.', $db_name );
 
+				$lines[] = 'cookbook_file "/mysql-db-imports/' . $import_file . '" do';
+				$lines[] = '	mode 0644';
+				$lines[] = '	source "' . $import_file . '"';
+				$lines[] = 'end';
+
+				$create_command = 'create database if not exists \\\`' . $db_name . '\\\`;';
+				$grant_command = 'grant all on \\\`' . $db_name . '\\\`.* to \'root\'@\'localhost\' identified by \'#{node[:mysql][:server_root_password]}\';';
+
+				$lines[] = 'execute "mysql -u root -p#{node[:mysql][:server_root_password]} -e \"' . $create_command . ' ' . $grant_command . '\""';
 				$lines[] = 'execute "mysql -u root -p#{node[:mysql][:server_root_password]} ' . $db_name . ' < /mysql-db-imports/' . $import_file . '"' . "\n";
 			}
 		}

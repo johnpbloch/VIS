@@ -147,7 +147,7 @@ class VIS_Actions {
 					else if( 'done' === $result )
 						break;
 
-					$add_sub_domain = VIS::prompt( 'Do you want to add the sub-domain "' . $result . '"?', 'y', array( 'y', 'n' ) );
+					$add_sub_domain = VIS::prompt( 'Do you want to add the sub-domain "' . $result . '.' . $settings[ 'domain-name' ] . '"?', 'y', array( 'y', 'n' ) );
 					if( 'y' === $add_sub_domain )
 						$settings[ 'sub-domains' ][] = $result;
 				}

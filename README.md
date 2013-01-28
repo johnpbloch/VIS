@@ -33,5 +33,5 @@ After VIS has successfully completed, you'll have a bootstrapped VM running the 
 * MySQL
 I'm currently working on providing a way to integrate other packages like Xdebug, PHPUnit, and WP CLI into the server based on preference. Stay tuned for updates!
 
-[Vagrant]: http://vagrant.com
+[Vagrant]: http://vagrantup.com
 [VIS]: http://github.com/carldanley/VIS

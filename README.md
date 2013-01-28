@@ -2,7 +2,7 @@
 
 ## Introduction
 
-VIS is a handy utility that lets web developers bootstrap a VM through Vagrant via Chef. This utility script will handle the grunt-work when you need to integrate Vagrant into a project of your choice. After a series of prompts at command-line, VIS generates an entire Vagrant scaffold and even a dynamic, custom provisioning cookbook to get you on your feet.
+VIS is a handy utility that lets web developers generate a configuration for a VM through Vagrant via Chef. This utility script will handle the grunt-work when you need to integrate Vagrant into a project of your choice. After a series of prompts at command-line, VIS generates an entire Vagrant scaffold and even a dynamic, custom provisioning cookbook to get you on your feet.
 
 ## Requirements
 
@@ -26,7 +26,7 @@ You can easily import all of your *.sql files by creating a directory within the
 
 ## What you Get
 
-After VIS has successfully completed, you'll have a bootstrapped VM running the following:
+After VIS has successfully completed, you'll have a configuration file for a VM that runs the following:
 * Ubuntu 12.04
 * Nginx
 * PHP5-FPM

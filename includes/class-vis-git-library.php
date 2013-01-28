@@ -40,4 +40,13 @@ class VIS_Git_Library {
 		return $tmp;
 	}
 
+	/**
+	 * Returns all cookbooks internally registered
+	 *
+	 * @return array All cookbooks registered with this Git Library
+	 */
+	public static function get_entire_library() {
+		return self::$_cookbooks;
+	}
+
 }

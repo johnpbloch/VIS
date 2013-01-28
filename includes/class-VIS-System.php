@@ -62,6 +62,91 @@ class VIS_System {
 	}
 
 	/**
+	 * Deletes a file from a directory.
+	 *
+	 * @param string $directory The folder that the file will be deleted from
+	 * @param string $filename The file that will be deleted from the system
+	 * @return bool Indicates whether or not the file was deleted from the file system
+	 */
+	public static function delete_file( $directory = '', $filename = '' ) {
+		if( !is_dir( $directory ) ) {
+			echo 'ERROR: Could not remove "', $filename, '" because the directory "', $directory, '" does not exist!', "\n";
+			return false;
+		}
+
+		if( !is_file( $directory . '/' . $filename ) ) {
+			echo 'ERROR: Could not remove "', $filename, '" from the directory "', $directory, '" because it is not a file!', "\n";
+			return false;
+		}
+
+		unlink( $directory . '/' . $filename );
+		echo 'Removed "', $directory, '/', $filename, '"', "\n";
+		return true;
+	}
+
+	/**
+	 * Removes the git sub-modules from the .gitmodules file contained in the specified directory and removes them from
+	 * the git staging as well
+	 *
+	 * @param string $directory The directory to try to remove the cookbooks from.
+	 * @param array $cookbooks The cookbooks we need to check for
+	 * @return bool Indicates whether or not we could search and remove the git sub-modules
+	 */
+	public static function remove_cookbooks_from_git_repo( $directory = '', $cookbook_dir = '', $cookbooks = array() ) {
+		if( !is_dir( $directory ) ) {
+			echo 'ERROR: Could not remove cookbooks from .gitmodules because they are ', "\n";
+			return false;
+		}
+
+		// look for: [submodule "cookbooks/build-essential"]
+		$io = fopen( $directory . '/.gitmodules', 'r' );
+		if( false === $io ) {
+			echo 'ERROR: Could not remove the git module entries. Probably invalid permissions.', "\n";
+			return false;
+		}
+
+		$lines = array();
+		while( false !== ( $line = fgets( $io ) ) )
+			$lines[] = $line;
+		fclose( $io );
+		$lines = implode( "", $lines );
+
+		// now replace any cookbooks we might have added
+		foreach( $cookbooks as $cookbook_recipe => $cookbook_settings ) {
+			$path = $cookbook_dir . '/' . $cookbook_settings[ 'git-folder' ];
+			$looking_for = '[submodule "' . $path . '"]' . "\n";
+			$looking_for .= "\t" . 'path = ' . $path  . "\n";
+			$looking_for .= "\t" . 'url = ' . $cookbook_settings[ 'git-path' ] . "\n";
+
+			$lines = str_replace( $looking_for, '', $lines );
+
+			// remove the cookbook from git via command line now
+			echo 'Removing the cookbook "', $cookbook_recipe, '" from git staging...', "\n";
+			exec( 'cd ' . $directory . ' && git rm --cached ./' . $cookbook_dir . '/' . $cookbook_settings[ 'git-folder' ] );
+		}
+		self::create_file( $directory, '.gitmodules', $lines );
+
+		return true;
+	}
+
+	/**
+	 * Recursively deletes a folder and all of its contents from the file system
+	 *
+	 * @param string $directory The directory that will be removed from the file system
+	 * @return bool Indicates the whether or not the directory could be removed from the file system
+	 */
+	public static function delete_directory( $directory = '' ) {
+		if( !is_dir( $directory ) ) {
+			echo 'ERROR: Cannot delete the directory "', $directory, '" because it is not a valid directory!', "\n";
+			return false;
+		}
+
+		exec( 'rm -Rf ' . $directory );
+		echo 'Removed the directory "', $directory, '"', "\n";
+		return true;
+	}
+
+	/**
 	 * Copies a file from its point of origination to the destination path specified
 	 *
 	 * @param string $from The origin file's full path.

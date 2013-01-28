@@ -56,6 +56,27 @@ class VIS_Actions {
 	}
 
 	/**
+	 * Removes the Vagrant integration that was previously installed
+	 *
+	 * @param string $base_dir The directory we're trying to remove the Vagrant integration from
+	 */
+	public static function remove_integration( $base_dir = '' ) {
+		// check to see if this folder contains git and has any cookbooks installed
+		if( !VIS_System::directory_contains( $base_dir, '.git' ) || !VIS_System::directory_contains( $base_dir, 'cookbooks' ) || !VIS_System::directory_contains( $base_dir, 'Vagrantfile' ) )
+			die( 'ERROR: This directory does not contain Vagrant!' . "\n" );
+
+		// confirm that this is def. something the user wants to do
+		if( 'n' === VIS::prompt( 'Are you sure you want to permanently remove Vagrant from this directory?', 'n', array( 'y', 'n' ) ) )
+			return;
+
+		// do not remove the db-imports folder because that's something that the user put there
+		// remove the Vagrantfile first
+		VIS_System::delete_file( $base_dir, 'Vagrantfile' );
+		VIS_System::delete_directory( $base_dir . '/cookbooks/' );
+		VIS_System::remove_cookbooks_from_git_repo( $base_dir, 'cookbooks', VIS_Git_Library::get_entire_library() );
+	}
+
+	/**
 	 * Prepares all of the required integration directories
 	 *
 	 * @param string $base_dir The directory we're building the required integration directories for

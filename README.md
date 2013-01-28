@@ -12,6 +12,9 @@ VIS is a handy utility that lets web developers generate a configuration for a V
 ## Installation
 
 1. `git clone git@github.com:carldanley/VIS.git` - clone [VIS] somewhere on your computer.
+
+## Integrating Vagrant via VIS
+
 1. Add a function named `vis_integrate` to your `~/.bash_profile` that calls the VIS.php script you just cloned like this `php /my/dir/VIS/VIS.php $PWD --integrate`
 1. Don't forget to `source ~/.bash_profile`
 1. Navigate to a directory of your choice and type `vis_integrate`
@@ -19,6 +22,16 @@ VIS is a handy utility that lets web developers generate a configuration for a V
 1. Watch as VIS integrates Vagrant right into your project for you
 1. When VIS is finished and you've returned to command-line, you can immediately `vagrant up` to boot-up your brand new VM. It's that easy!
 1. Don't forget to add any hosts records to your `/etc/hosts` file.
+
+## Removing Vagrant Integration via VIS
+
+1. Add a function named `vis_remove_integration` to your `~/.bash_profile` that calls the VIS.php script you just cloned like this `php /my/dir/VIS/VIS.php $PWD --remove-integration`
+1. Don't forget to `source ~/.bash_profile`
+1. Navigate to a directory that you have previously integrated Vagrant through VIS and type `vis_remove_integration`
+1. Answer any questions VIS might have
+1. Watch as VIS automatically removes the Vagrant integration including all sub-modules that might have been initialized in the first place
+1. When VIS is finished and you've returned to command-line, you will have a Vagrant-less folder!
+1. Don't forget to remove any hosts records from your `/etc/hosts` file.
 
 ## MySQL Imports
 

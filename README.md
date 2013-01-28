@@ -13,7 +13,7 @@ VIS is a handy utility that lets web developers bootstrap a VM through Vagrant v
 
 1. `git clone git@github.com:carldanley/VIS.git` - clone [VIS] somewhere on your computer.
 1. Add a function named `vis_integrate` to your `~/.bash_profile` that calls the VIS.php script you just cloned like this `php /my/dir/VIS/VIS.php $PWD --integrate`
-1. Don't forget to source `source ~/.bash_profile`
+1. Don't forget to `source ~/.bash_profile`
 1. Navigate to a directory of your choice and type `vis_integrate`
 1. Answer any questions VIS might have
 1. Watch as VIS integrates Vagrant right into your project for you
